@@ -20,10 +20,25 @@
 2. 打开本仓库的 `cat-eye-qr-scanner.user.js`
 3. 点右上角 **Raw**，脚本管理器会弹出安装页，点「安装」
 
-安装地址（把 `<你的用户名>` 换成你的 GitHub 用户名）：
+安装地址：
 
-```[
+```
 https://raw.githubusercontent.com/shuimumu123/cat-eye-qr-scanner/main/cat-eye-qr-scanner.user.js
+```
+
+## 自动更新
+
+脚本已内置 `@updateURL` / `@downloadURL`，**装一次就够了**，以后作者发新版本会自动提示更新。
+
+- 更新源：本仓库 `main` 分支的 `cat-eye-qr-scanner.user.js`
+- 检查频率：Tampermonkey 默认每 24 小时检查一次，可在扩展设置里调整；也可在管理面板里手动「检查更新」
+- 只有脚本里的 `@version` 变大，才会被视为新版本
+
+如果访问 `raw.githubusercontent.com` 不稳定，可以把脚本开头这两行换成 jsDelivr 镜像（镜像有 1–12 小时缓存延迟）：
+
+```
+// @updateURL    https://cdn.jsdelivr.net/gh/shuimumu123/cat-eye-qr-scanner@main/cat-eye-qr-scanner.user.js
+// @downloadURL  https://cdn.jsdelivr.net/gh/shuimumu123/cat-eye-qr-scanner@main/cat-eye-qr-scanner.user.js
 ```
 
 ## 使用
@@ -49,6 +64,10 @@ https://raw.githubusercontent.com/shuimumu123/cat-eye-qr-scanner/main/cat-eye-qr
 
 ## 更新日志
 
+### 8.6.1
+
+- 元数据：新增 `@updateURL` / `@downloadURL` / `@homepageURL` / `@supportURL`，安装后自动跟随仓库更新
+
 ### 8.6
 
 - 性能：自动扫描每张图的 jsQR 调用从 22 次降到 5 次（约 −77%）
@@ -63,6 +82,14 @@ https://raw.githubusercontent.com/shuimumu123/cat-eye-qr-scanner/main/cat-eye-qr
 
 - 修复跨域图片识别、小二维码二次放大
 - 修正位置记忆、字体输入、请求超时与链接安全
+
+## 发布新版本（维护者）
+
+1. 改完脚本后，把 `@version` 递增（例如 `8.6.1` → `8.7`）；版本号不变，用户端不会更新
+2. 用**同名文件**覆盖上传到 `main` 分支（GitHub 网页：Add file → Upload files → 拖入 → Commit changes）
+3. 用户端到期自动检查并更新；没装过的用户直接打开安装地址即可
+
+别改文件名和路径，否则 `@updateURL` 会 404，自动更新就静默失效了。
 
 ## 说明
 

@@ -20,10 +20,25 @@ A web QR-code scanner userscript with a blue-and-white iOS look, running on Tamp
 2. Open `cat-eye-qr-scanner.user.js` in this repository
 3. Click **Raw** in the top-right corner; your manager shows the install page — click **Install**
 
-Install URL (replace `<your-username>` with your GitHub username):
+Install URL:
 
 ```
 https://raw.githubusercontent.com/shuimumu123/cat-eye-qr-scanner/main/cat-eye-qr-scanner.user.js
+```
+
+## Auto-update
+
+The script ships with `@updateURL` / `@downloadURL`, so **one install is enough** — new releases are picked up automatically.
+
+- Source: `cat-eye-qr-scanner.user.js` on the `main` branch of this repository
+- Check interval: Tampermonkey checks about every 24 hours by default (configurable); you can also trigger "Check for updates" manually
+- A new release is detected only when `@version` increases
+
+If `raw.githubusercontent.com` is slow or blocked in your network, replace those two metadata lines with the jsDelivr mirror (it caches for 1–12 hours):
+
+```
+// @updateURL    https://cdn.jsdelivr.net/gh/shuimumu123/cat-eye-qr-scanner@main/cat-eye-qr-scanner.user.js
+// @downloadURL  https://cdn.jsdelivr.net/gh/shuimumu123/cat-eye-qr-scanner@main/cat-eye-qr-scanner.user.js
 ```
 
 ## Usage
@@ -49,6 +64,10 @@ Scan box position, panel position/size and font size are all remembered automati
 
 ## Changelog
 
+### 8.6.1
+
+- Metadata: added `@updateURL` / `@downloadURL` / `@homepageURL` / `@supportURL` so installs follow the repository automatically
+
 ### 8.6
 
 - Perf: auto scan drops from 22 to 5 jsQR calls per image (about −77%)
@@ -63,6 +82,14 @@ Scan box position, panel position/size and font size are all remembered automati
 
 - Fixed cross-origin image decoding and the small-QR second pass
 - Fixed position memory, font-size input, request timeouts and link safety
+
+## Releasing a new version (maintainer)
+
+1. Bump `@version` in the script (e.g. `8.6.1` → `8.7`); users are not updated unless the version increases
+2. Overwrite the file **with the same name** on the `main` branch (on GitHub: Add file → Upload files → drag in → Commit changes)
+3. Installed copies update on their next check; new users just open the install URL
+
+Do not rename or move the file, otherwise `@updateURL` returns 404 and auto-update silently stops working.
 
 ## Notes
 
