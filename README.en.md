@@ -1,6 +1,6 @@
 # Cat Eye QR Scanner
 
-A web QR-code scanner userscript with a blue-and-white iOS look, running on Tampermonkey / Violentmonkey.
+A web QR-code scanner userscript in a "night cat-eye" style, running on Tampermonkey / Violentmonkey. A dark-glass panel with night-vision teal glow — easy to spot even on light pages.
 
 [简体中文](README.md) | **English**
 
@@ -11,7 +11,7 @@ A web QR-code scanner userscript with a blue-and-white iOS look, running on Tamp
 - **Screenshot fallback** — when an image is cross-origin and unreadable, the region is captured with html2canvas and decoded
 - **Pan link cleanup** — extracts Baidu Pan links from QR text and fills in the `?pwd=` code
 - **History** — keeps the 15 most recent results with timestamps and one-click copy
-- **UI** — blue cat floating ball, collapsible panel, remembered position and size, pin-to-screen mode, 10–30px font size
+- **UI** — night-cat floating ball (breathing glow), collapsible panel, remembered position and size, pin-to-screen mode, 10–30px font size
 - **Shortcut** — `Ctrl + Shift + F` triggers auto scan
 
 ## Install
@@ -47,7 +47,7 @@ If `raw.githubusercontent.com` is slow or blocked in your network, replace those
 | --- | --- |
 | Click the cat ball | Expand the main panel |
 | 📷 Scan web QR code | Drag/resize the scan box (8 handles), then click "识别二维码" (decode) |
-| 🔍 Auto scan page | Scans visible images; click an orange-outlined image to copy its links |
+| 🔍 Auto scan page | Scans visible images; click a teal-glowing image to copy its links |
 | ◷ History | Review the last 15 results |
 | ⚙ Settings | Pin panel, font size, reset scan box / panel position |
 | Esc | Cancel the current selection |
@@ -63,6 +63,13 @@ Scan box position, panel position/size and font size are all remembered automati
 - Matches all sites (`*://*/*`), `@noframes` by default
 
 ## Changelog
+
+### 8.7
+
+- Look: the whole UI is now the "night cat-eye" theme — dark-glass panel with night-vision teal glow, new cat-eye icons in the title and floating ball
+- Look: scanning frame gains corner brackets and a sweeping light beam
+- Look: auto-scan matches now get a teal glow outline that turns amber on hover
+- Misc: title text has a faint teal glow; animations respect `prefers-reduced-motion`
 
 ### 8.6.1
 

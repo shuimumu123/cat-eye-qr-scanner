@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         猫眼扫描工具
 // @namespace    https://example.com/
-// @version      8.6.1
-// @description  蓝白 iOS 风格猫眼扫描、智能15条历史记录、扫描框记忆、蓝白小猫悬浮球、设置、固定主界面、字体调整、自动高亮页面二维码、扫描时间标记（修复跨域与小二维码识别；修正位置记忆、字体输入、请求超时与链接安全；性能优化；支持自动更新）
+// @version      8.7
+// @description  夜色猫眼风格（深墨玻璃＋夜视青光）、智能15条历史记录、扫描框记忆、夜色小猫悬浮球、设置、固定主界面、字体调整、自动高亮页面二维码、扫描时间标记（修复跨域与小二维码识别；修正位置记忆、字体输入、请求超时与链接安全；性能优化；支持自动更新）
 // @author       MOYU
 // @homepageURL  https://github.com/shuimumu123/cat-eye-qr-scanner
 // @supportURL   https://github.com/shuimumu123/cat-eye-qr-scanner/issues
@@ -340,31 +340,37 @@ function ensureHost() {
             font: inherit;
         }
 
+        /* ---------- 主面板：深墨玻璃 + 猫眼猫瞳 ---------- */
+
         #panel {
             position: fixed !important;
             left: auto;
             top: auto;
             width: 280px;
-            height: 220px;
+            height: 224px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             margin: 0 !important;
 
-            background: ${C.bg};
+            background:
+                radial-gradient(130% 80% at 50% -12%, rgba(47,227,196,0.13), transparent 62%),
+                linear-gradient(168deg, rgba(14,22,30,0.97), rgba(6,10,14,0.985));
 
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            backdrop-filter: blur(28px) saturate(150%);
+            -webkit-backdrop-filter: blur(28px) saturate(150%);
 
-            border: 1px solid ${C.border};
-            border-radius: 24px;
+            border: 1px solid rgba(94,234,212,0.16);
+            border-radius: 22px;
 
             box-shadow:
-                ${C.shadow},
-                0 2px 8px rgba(0,0,0,0.04);
+                0 24px 60px rgba(0,0,0,0.55),
+                0 2px 10px rgba(0,0,0,0.35),
+                inset 0 1px 0 rgba(255,255,255,0.05),
+                0 0 42px rgba(47,227,196,0.07);
 
-            color: ${C.text};
-            font-family: ${C.fontSans};
+            color: #E8F2F2;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
             font-size: 13px;
 
             pointer-events: auto !important;
@@ -379,60 +385,60 @@ function ensureHost() {
             display: none !important;
         }
 
+        /* 顶部猫眼反光（chatoyancy）：青绿到琥珀的一线流光 */
+        #panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 12%;
+            right: 12%;
+            height: 1.5px;
+
+            background: linear-gradient(
+                90deg,
+                rgba(47,227,196,0) 0%,
+                rgba(47,227,196,0.85) 42%,
+                rgba(246,193,119,0.85) 58%,
+                rgba(246,193,119,0) 100%
+            );
+
+            opacity: 0.75;
+            pointer-events: none;
+            z-index: 5;
+        }
+
         #panel::after {
             content: '';
             position: absolute;
             inset: 0;
 
             background-image:
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
 
             pointer-events: none;
             z-index: 1;
-        }
-
-        #panel::before {
-            content: '';
-            position: absolute;
-            inset: -20%;
-
-            background:
-                radial-gradient(
-                    circle at 20% 20%,
-                    rgba(0,122,255,0.05),
-                    transparent 60%
-                ),
-
-                radial-gradient(
-                    circle at 80% 80%,
-                    rgba(0,122,255,0.03),
-                    transparent 60%
-                );
-
-            pointer-events: none;
-            z-index: 0;
+            mix-blend-mode: screen;
         }
 
         #title {
-            height: 54px;
+            height: 56px;
             flex-shrink: 0;
 
             display: flex;
             align-items: center;
             justify-content: space-between;
 
-            padding: 0 20px;
+            padding: 0 18px;
 
-            background: transparent;
+            background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0));
 
-            border-bottom:
-                0.5px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
 
             cursor: move;
             user-select: none;
 
             position: relative;
-            z-index: 2;
+            z-index: 3;
         }
 
         .title-left {
@@ -446,45 +452,52 @@ function ensureHost() {
             align-items: center;
             justify-content: center;
 
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
 
-            border-radius: 10px;
+            border-radius: 11px;
 
             background:
-                rgba(0,122,255,0.08);
+                radial-gradient(circle at 32% 24%, rgba(47,227,196,0.20), rgba(47,227,196,0.04) 70%);
+
+            border: 1px solid rgba(47,227,196,0.20);
 
             box-shadow:
-                0 0 10px rgba(0,122,255,0.08);
+                inset 0 0 14px rgba(47,227,196,0.14),
+                0 0 18px rgba(47,227,196,0.10);
+        }
+
+        .title-icon svg {
+            display: block;
         }
 
         .title-text {
             font-weight: 600;
-            font-size: 1.15em;
-            letter-spacing: -0.01em;
-            color: ${C.text};
+            font-size: 1.12em;
+            letter-spacing: 0.05em;
+            color: #EAF6F4;
+            text-shadow: 0 0 18px rgba(47,227,196,0.20);
         }
 
         #actions {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
         }
 
         .circle {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
 
             padding: 0;
             margin: 0;
 
-            border: 0;
+            border: 1px solid rgba(255,255,255,0.07);
             border-radius: 50%;
 
-            background:
-                rgba(0,0,0,0.03);
+            background: rgba(255,255,255,0.045);
 
-            color: ${C.lightText};
+            color: #93A9B4;
 
             display: flex;
             align-items: center;
@@ -496,27 +509,16 @@ function ensureHost() {
             transition:
                 background 0.2s ease,
                 color 0.2s ease,
+                border-color 0.2s ease,
                 box-shadow 0.2s ease,
                 transform 0.12s ease;
-
-            box-shadow:
-                inset
-                0 0 0
-                0.5px
-                rgba(0,0,0,0.05);
         }
 
         .circle:hover {
-            background:
-                rgba(0,0,0,0.06);
-
-            color: ${C.primary};
-
-            box-shadow:
-                inset
-                0 0 0
-                0.5px
-                rgba(0,122,255,0.2);
+            background: rgba(47,227,196,0.10);
+            border-color: rgba(47,227,196,0.35);
+            color: #5FF5D0;
+            box-shadow: 0 0 16px rgba(47,227,196,0.18);
         }
 
         .circle:active {
@@ -530,24 +532,22 @@ function ensureHost() {
         .settings-btn:focus-visible,
         #scanBtn:focus-visible,
         #autoScanBtn:focus-visible,
-        .scan-action:focus-visible {
-            outline:
-                2px solid
-                rgba(0,122,255,0.35);
-
+        .scan-action:focus-visible,
+        .switch:focus-visible {
+            outline: 2px solid rgba(47,227,196,0.55);
             outline-offset: 2px;
         }
 
         #historyBtn {
-            font-size: 1.3em;
+            font-size: 1.24em;
         }
 
         #settingsBtn {
-            font-size: 1.38em;
+            font-size: 1.30em;
         }
 
         #foldMainBtn {
-            font-size: 1.15em;
+            font-size: 1.05em;
         }
 
         #content {
@@ -557,64 +557,77 @@ function ensureHost() {
             display: flex;
             flex-direction: column;
 
-            gap: 16px;
-            padding: 20px;
+            gap: 11px;
+            padding: 16px 16px 14px;
 
             overflow: hidden;
 
             position: relative;
-            z-index: 2;
+            z-index: 3;
         }
 
         #scanBtn, #autoScanBtn {
             flex-shrink: 0;
 
-            padding: 12px 18px;
+            padding: 11px 16px;
 
-            border: 0;
-            border-radius: 14px;
-
-            background: ${C.primary};
-
-            color: #fff;
+            border-radius: 13px;
 
             cursor: pointer;
 
             font-weight: 600;
-            font-size: 1em;
-            letter-spacing: 0.02em;
+            font-size: 0.98em;
+            letter-spacing: 0.04em;
 
-            box-shadow: 0 2px 8px rgba(0,122,255,0.2);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
 
             transition:
                 background 0.2s ease,
                 box-shadow 0.2s ease,
+                border-color 0.2s ease,
+                color 0.2s ease,
                 transform 0.12s ease;
+        }
 
-            font-family: ${C.fontSans};
+        #scanBtn {
+            border: 1px solid rgba(255,255,255,0.10);
+            background: linear-gradient(180deg, #3BEDD0, #12A88F);
+            color: #032420;
+
+            box-shadow:
+                0 8px 22px rgba(18,168,143,0.30),
+                inset 0 1px 0 rgba(255,255,255,0.35);
+        }
+
+        #scanBtn:hover {
+            background: linear-gradient(180deg, #5CF7DE, #16BFA3);
+            box-shadow:
+                0 10px 28px rgba(18,168,143,0.40),
+                inset 0 1px 0 rgba(255,255,255,0.40);
+            transform: translateY(-1px);
+        }
+
+        #scanBtn:active {
+            transform: translateY(0) scale(0.99);
+            box-shadow: 0 4px 14px rgba(18,168,143,0.32);
         }
 
         #autoScanBtn {
-            margin-top: 10px;
-            background: rgba(0,122,255,0.1);
-            color: ${C.primary};
-            border: 0.5px solid rgba(0,122,255,0.2);
+            border: 1px solid rgba(47,227,196,0.26);
+            background: rgba(47,227,196,0.06);
+            color: #8BE9DA;
             box-shadow: none;
         }
 
-        #scanBtn:hover, #autoScanBtn:hover {
-            background: ${C.primaryDark};
-            box-shadow: 0 4px 12px rgba(0,122,255,0.3);
-        }
-
         #autoScanBtn:hover {
-            background: rgba(0,122,255,0.2);
-            box-shadow: 0 2px 6px rgba(0,122,255,0.2);
+            background: rgba(47,227,196,0.13);
+            border-color: rgba(47,227,196,0.46);
+            color: #C9FFF2;
+            box-shadow: 0 0 18px rgba(47,227,196,0.12);
         }
 
-        #scanBtn:active, #autoScanBtn:active {
-            transform: scale(0.98);
-            box-shadow: 0 1px 4px rgba(0,122,255,0.2);
+        #autoScanBtn:active {
+            transform: scale(0.99);
         }
 
         #results {
@@ -629,129 +642,143 @@ function ensureHost() {
             display: flex;
             flex-direction: column;
 
-            gap: 12px;
+            gap: 9px;
             padding-right: 2px;
         }
 
         .result-title {
-            padding: 12px 16px;
+            padding: 9px 13px;
 
-            border-radius: 14px;
+            border-radius: 12px;
 
-            background: rgba(0,0,0,0.03);
+            background: rgba(255,255,255,0.035);
 
-            color: ${C.lightText};
+            border: 1px solid rgba(255,255,255,0.05);
+
+            color: #93A7B2;
 
             font-weight: 500;
-            font-size: 0.92em;
+            font-size: 0.86em;
 
-            letter-spacing: 0.04em;
-
-            border: none;
+            letter-spacing: 0.03em;
 
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
+        .result-title::before {
+            content: '';
+            flex-shrink: 0;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #2FE3C4;
+            box-shadow: 0 0 9px rgba(47,227,196,0.9);
+        }
+
         #resultTime {
-            color: ${C.superLightText};
-            font-size: 0.85em;
+            margin-left: auto;
+            color: #6E8794;
+            font-size: 0.9em;
             font-weight: 400;
+            font-family: SF Mono, "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
+            font-variant-numeric: tabular-nums;
         }
 
         .result {
-            padding: 14px 16px;
+            padding: 11px 13px;
 
-            border-radius: 14px;
+            border-radius: 12px;
 
-            background: ${C.cardBg};
+            background: rgba(255,255,255,0.035);
 
-            border: 0.5px solid rgba(0,0,0,0.03);
-
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
 
             transition:
                 background 0.2s ease,
+                border-color 0.2s ease,
                 box-shadow 0.2s ease;
         }
 
         .result:hover {
-            background: #fff;
-
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            background: rgba(47,227,196,0.06);
+            border-color: rgba(47,227,196,0.28);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.35);
         }
 
         .result-num {
-            margin-bottom: 8px;
+            margin-bottom: 7px;
 
-            color: ${C.superLightText};
+            color: #6E8794;
 
-            font-size: 0.77em;
+            font-size: 0.72em;
             font-weight: 500;
 
-            letter-spacing: 0.04em;
+            letter-spacing: 0.10em;
 
-            font-family: ${C.fontMono};
+            font-family: SF Mono, "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
+            font-variant-numeric: tabular-nums;
         }
 
         .result-row {
             display: flex;
             align-items: center;
 
-            gap: 10px;
+            gap: 9px;
         }
 
         .result-link {
             flex: 1;
             min-width: 0;
 
-            color: ${C.primaryDark};
+            color: #7FE7FF;
 
             text-decoration: none;
 
             word-break: break-all;
 
-            line-height: 1.4;
+            line-height: 1.45;
 
-            font-family: ${C.fontMono};
+            font-family: SF Mono, "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
 
-            font-size: 0.92em;
+            font-size: 0.88em;
             font-weight: 500;
 
             transition: color 0.2s ease;
         }
 
         .result-link:hover {
-            color: ${C.primary};
+            color: #B9FFF4;
             text-decoration: underline;
+            text-underline-offset: 2px;
         }
 
         .copy-btn {
             flex-shrink: 0;
 
-            padding: 6px 12px;
+            padding: 5px 10px;
 
-            border: 0;
+            border: 1px solid rgba(47,227,196,0.22);
             border-radius: 8px;
 
-            background: rgba(0,122,255,0.08);
+            background: rgba(47,227,196,0.10);
 
-            color: ${C.primary};
+            color: #7FF3DC;
 
             cursor: pointer;
 
-            font-size: 0.85em;
+            font-size: 0.82em;
             font-weight: 600;
             letter-spacing: 0.02em;
 
             transition: background 0.2s ease, transform 0.12s ease;
 
-            font-family: ${C.fontSans};
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
         }
 
         .copy-btn:hover {
-            background: rgba(0,122,255,0.18);
+            background: rgba(47,227,196,0.20);
         }
 
         .copy-btn:active {
@@ -759,56 +786,60 @@ function ensureHost() {
         }
 
         .error {
-            padding: 14px 16px;
+            padding: 12px 14px;
 
-            border-radius: 14px;
+            border-radius: 12px;
 
-            background: rgba(255,59,48,0.05);
+            background: rgba(255,107,107,0.07);
 
-            border: 0.5px solid rgba(255,59,48,0.2);
+            border: 1px solid rgba(255,107,107,0.24);
 
-            color: #FF3B30;
+            color: #FF9E9E;
 
-            line-height: 1.5;
-            font-size: 0.92em;
+            line-height: 1.6;
+            font-size: 0.9em;
 
             white-space: pre-line;
         }
 
+        /* ---------- 设置面板 ---------- */
+
         #settingsPanel {
             position: absolute !important;
 
-            top: 60px;
-            right: 16px;
+            top: 62px;
+            right: 14px;
 
-            width: 220px;
+            width: 222px;
 
-            max-height: calc(100% - 76px);
+            max-height: calc(100% - 78px);
 
             overflow-y: auto;
 
             padding: 18px;
 
-            background: rgba(255,255,255,0.9);
+            background: linear-gradient(168deg, rgba(16,26,35,0.98), rgba(8,13,19,0.99));
 
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            backdrop-filter: blur(30px) saturate(150%);
+            -webkit-backdrop-filter: blur(30px) saturate(150%);
 
-            border: 0.5px solid rgba(0,0,0,0.06);
+            border: 1px solid rgba(94,234,212,0.14);
 
-            border-radius: 20px;
+            border-radius: 18px;
 
-            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            box-shadow:
+                0 22px 54px rgba(0,0,0,0.62),
+                inset 0 1px 0 rgba(255,255,255,0.04);
 
             z-index: 1000;
 
             display: none;
 
-            color: ${C.text};
+            color: #E8F2F2;
 
             font-size: 1em;
 
-            font-family: ${C.fontSans};
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
         }
 
         #settingsPanel.show {
@@ -816,14 +847,14 @@ function ensureHost() {
         }
 
         .settings-title {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
 
             font-weight: 600;
-            font-size: 1em;
+            font-size: 0.86em;
 
-            letter-spacing: 0.02em;
+            letter-spacing: 0.16em;
 
-            color: ${C.lightText};
+            color: #8FA6B2;
         }
 
         .settings-switch-row {
@@ -833,13 +864,13 @@ function ensureHost() {
 
             gap: 12px;
 
-            padding: 8px 0 18px;
+            padding: 4px 0 16px;
         }
 
         .settings-switch-label {
-            color: ${C.lightText};
+            color: #A9BCC7;
 
-            font-size: 0.92em;
+            font-size: 0.9em;
 
             user-select: none;
         }
@@ -859,21 +890,23 @@ function ensureHost() {
 
             cursor: pointer;
 
-            background: rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.10);
 
-            transition: background 0.2s ease;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
 
-            box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.05);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
         }
 
         .switch.off {
-            background: rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.10);
         }
 
         .switch.on {
-            background: ${C.primary};
+            background: linear-gradient(90deg, #12A88F, #2FE3C4);
 
-            box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.05), 0 2px 6px rgba(0,122,255,0.3);
+            box-shadow:
+                inset 0 0 0 1px rgba(255,255,255,0.10),
+                0 0 16px rgba(47,227,196,0.35);
         }
 
         .switch-knob {
@@ -887,9 +920,9 @@ function ensureHost() {
 
             border-radius: 50%;
 
-            background: #fff;
+            background: #F4FBFA;
 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.45);
 
             transition: transform 0.2s ease;
         }
@@ -898,13 +931,8 @@ function ensureHost() {
             transform: translateX(20px);
         }
 
-        .switch:focus-visible {
-            outline: 2px solid ${C.primary};
-            outline-offset: 2px;
-        }
-
         .font-setting {
-            padding: 8px 0 18px;
+            padding: 4px 0 16px;
         }
 
         .font-setting-head {
@@ -914,7 +942,9 @@ function ensureHost() {
 
             gap: 12px;
 
-            color: ${C.lightText};
+            color: #A9BCC7;
+
+            font-size: 0.9em;
         }
 
         .font-input-wrap {
@@ -924,7 +954,7 @@ function ensureHost() {
 
             gap: 6px;
 
-            color: ${C.superLightText};
+            color: #6E8794;
 
             font-size: 0.85em;
         }
@@ -935,51 +965,51 @@ function ensureHost() {
 
             padding: 4px 8px;
 
-            border: 0.5px solid rgba(0,0,0,0.1);
-
+            border: 1px solid rgba(255,255,255,0.10);
             border-radius: 8px;
 
-            background: #fff;
+            background: rgba(255,255,255,0.05);
 
-            color: ${C.text};
+            color: #E8F2F2;
 
             text-align: center;
 
             outline: none;
 
-            font-family: ${C.fontMono};
+            font-family: SF Mono, "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
 
             font-size: 0.92em;
 
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
 
         .font-input:focus {
-            border-color: ${C.primary};
+            border-color: rgba(47,227,196,0.70);
 
-            box-shadow: 0 0 0 2px rgba(0,122,255,0.15);
+            background: rgba(255,255,255,0.08);
+
+            box-shadow: 0 0 0 3px rgba(47,227,196,0.14);
         }
 
         .settings-btn {
             width: 100%;
 
-            padding: 9px 14px;
+            padding: 9px 13px;
 
             margin-top: 8px;
 
-            border: 0.5px solid rgba(0,0,0,0.06);
-
+            border: 1px solid rgba(255,255,255,0.07);
             border-radius: 10px;
 
-            background: rgba(0,0,0,0.02);
+            background: rgba(255,255,255,0.04);
 
-            color: ${C.lightText};
+            color: #A9BCC7;
 
             cursor: pointer;
 
             text-align: left;
 
-            font-size: 0.85em;
+            font-size: 0.84em;
 
             letter-spacing: 0.02em;
 
@@ -987,11 +1017,11 @@ function ensureHost() {
         }
 
         .settings-btn:hover {
-            background: rgba(0,0,0,0.04);
+            background: rgba(47,227,196,0.07);
 
-            border-color: rgba(0,122,255,0.2);
+            border-color: rgba(47,227,196,0.28);
 
-            color: ${C.text};
+            color: #CFF7EC;
         }
 
         .settings-btn:active {
@@ -1015,7 +1045,7 @@ function ensureHost() {
 
             padding: 8px 10px;
 
-            font-size: 0.77em;
+            font-size: 0.75em;
 
             text-align: center;
 
@@ -1029,47 +1059,51 @@ function ensureHost() {
         }
 
         .settings-actions .settings-btn:hover {
-            background: rgba(0,122,255,0.06);
+            background: rgba(47,227,196,0.09);
 
-            border-color: rgba(0,122,255,0.3);
+            border-color: rgba(47,227,196,0.32);
 
-            color: ${C.primary};
+            color: #CFF7EC;
         }
+
+        /* ---------- 历史记录 ---------- */
 
         #historyPanel {
             position: absolute !important;
 
-            top: 60px;
-            right: 16px;
+            top: 62px;
+            right: 14px;
 
             width: min(320px, calc(100% - 24px));
 
-            max-height: calc(100% - 76px);
+            max-height: calc(100% - 78px);
 
             overflow: hidden;
 
             padding: 14px;
 
-            background: rgba(255,255,255,0.94);
+            background: linear-gradient(168deg, rgba(16,26,35,0.98), rgba(8,13,19,0.99));
 
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            backdrop-filter: blur(30px) saturate(150%);
+            -webkit-backdrop-filter: blur(30px) saturate(150%);
 
-            border: 0.5px solid rgba(0,0,0,0.06);
+            border: 1px solid rgba(94,234,212,0.14);
 
-            border-radius: 20px;
+            border-radius: 18px;
 
-            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            box-shadow:
+                0 22px 54px rgba(0,0,0,0.62),
+                inset 0 1px 0 rgba(255,255,255,0.04);
 
             z-index: 1100;
 
             display: none;
 
-            color: ${C.text};
+            color: #E8F2F2;
 
             font-size: 1em;
 
-            font-family: ${C.fontSans};
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
         }
 
         #historyPanel.show {
@@ -1093,21 +1127,22 @@ function ensureHost() {
         }
 
         .history-title {
-            color: ${C.text};
+            color: #E8F2F2;
 
             font-weight: 600;
 
-            font-size: 1em;
+            font-size: 0.94em;
 
-            letter-spacing: 0.02em;
+            letter-spacing: 0.06em;
         }
 
         .history-count {
-            color: ${C.superLightText};
+            color: #6E8794;
 
-            font-size: 0.78em;
+            font-size: 0.76em;
 
-            font-family: ${C.fontMono};
+            font-family: SF Mono, "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
+            font-variant-numeric: tabular-nums;
         }
 
         #historyList {
@@ -1131,37 +1166,39 @@ function ensureHost() {
         .history-empty {
             padding: 18px 10px;
 
+            border: 1px dashed rgba(255,255,255,0.10);
+
             border-radius: 12px;
 
-            background: rgba(0,0,0,0.025);
+            background: rgba(255,255,255,0.025);
 
-            color: ${C.lightText};
+            color: #7E97A4;
 
             text-align: center;
 
-            line-height: 1.5;
+            line-height: 1.6;
 
-            font-size: 0.86em;
+            font-size: 0.84em;
         }
 
         .history-item {
             padding: 10px 11px;
 
-            border-radius: 13px;
+            border-radius: 12px;
 
-            background: rgba(240,244,248,0.78);
+            background: rgba(255,255,255,0.04);
 
-            border: 0.5px solid rgba(0,0,0,0.035);
+            border: 1px solid rgba(255,255,255,0.06);
 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-
-            transition: background 0.2s ease, box-shadow 0.2s ease;
+            transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         .history-item:hover {
-            background: #fff;
+            background: rgba(47,227,196,0.05);
 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-color: rgba(47,227,196,0.22);
+
+            box-shadow: 0 8px 20px rgba(0,0,0,0.32);
         }
 
         .history-meta {
@@ -1175,11 +1212,12 @@ function ensureHost() {
 
             margin-bottom: 6px;
 
-            color: ${C.superLightText};
+            color: #6E8794;
 
-            font-size: 0.72em;
+            font-size: 0.70em;
 
-            font-family: ${C.fontMono};
+            font-family: SF Mono, "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
+            font-variant-numeric: tabular-nums;
         }
 
         .history-link-row {
@@ -1203,25 +1241,26 @@ function ensureHost() {
 
             overflow: hidden;
 
-            color: ${C.primaryDark};
+            color: #7FE7FF;
 
             text-decoration: none;
 
             word-break: break-all;
 
-            line-height: 1.38;
+            line-height: 1.42;
 
-            font-family: ${C.fontMono};
+            font-family: SF Mono, "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
 
-            font-size: 0.83em;
+            font-size: 0.82em;
 
             font-weight: 500;
         }
 
         .history-link:hover {
-            color: ${C.primary};
+            color: #B9FFF4;
 
             text-decoration: underline;
+            text-underline-offset: 2px;
         }
 
         .history-copy {
@@ -1229,27 +1268,27 @@ function ensureHost() {
 
             padding: 5px 9px;
 
-            border: 0;
+            border: 1px solid rgba(47,227,196,0.22);
 
             border-radius: 8px;
 
-            background: rgba(0,122,255,0.08);
+            background: rgba(47,227,196,0.10);
 
-            color: ${C.primary};
+            color: #7FF3DC;
 
             cursor: pointer;
 
-            font-size: 0.77em;
+            font-size: 0.76em;
 
             font-weight: 600;
 
-            font-family: ${C.fontSans};
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
 
             transition: background 0.2s ease, transform 0.12s ease;
         }
 
         .history-copy:hover {
-            background: rgba(0,122,255,0.16);
+            background: rgba(47,227,196,0.20);
         }
 
         .history-copy:active {
@@ -1269,39 +1308,40 @@ function ensureHost() {
         #clearHistoryBtn {
             padding: 7px 11px;
 
-            border: 0.5px solid rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
 
             border-radius: 9px;
 
-            background: rgba(0,0,0,0.025);
+            background: rgba(255,255,255,0.035);
 
-            color: ${C.lightText};
+            color: #93A7B2;
 
             cursor: pointer;
 
-            font-size: 0.77em;
+            font-size: 0.76em;
 
-            font-family: ${C.fontSans};
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
 
             transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
         }
 
         #clearHistoryBtn:hover {
-            background: rgba(255,59,48,0.07);
+            background: rgba(255,107,107,0.08);
 
-            color: #FF3B30;
+            color: #FF9E9E;
 
-            border-color: rgba(255,59,48,0.18);
+            border-color: rgba(255,107,107,0.28);
         }
+
+        /* ---------- 折叠悬浮球：夜色小猫 ---------- */
 
         #foldedBtn {
             position: fixed !important;
 
             left: auto !important;
 
-            width: 54px;
-
-            height: 54px;
+            width: 56px;
+            height: 56px;
 
             padding: 0;
 
@@ -1313,17 +1353,15 @@ function ensureHost() {
 
             justify-content: center;
 
-            background: rgba(255,255,255,0.85);
+            background: radial-gradient(circle at 50% 28%, rgba(47,227,196,0.20), rgba(7,12,17,0.97) 72%);
 
             backdrop-filter: blur(12px);
 
             -webkit-backdrop-filter: blur(12px);
 
-            border: 0.5px solid rgba(0,0,0,0.08);
+            border: 1px solid rgba(94,234,212,0.30);
 
             border-radius: 50%;
-
-            box-shadow: 0 7px 24px rgba(0,0,0,0.1), 0 0 16px rgba(0,122,255,0.05);
 
             cursor: pointer;
 
@@ -1339,6 +1377,8 @@ function ensureHost() {
 
             overflow: hidden;
 
+            animation: cat-pulse 3.8s ease-in-out infinite;
+
             transition: right 0.25s ease, transform 0.2s ease;
         }
 
@@ -1347,7 +1387,10 @@ function ensureHost() {
 
             transform: scale(1.08) !important;
 
-            box-shadow: 0 9px 26px rgba(0,0,0,0.15), 0 0 24px rgba(0,122,255,0.15);
+            box-shadow:
+                0 12px 32px rgba(0,0,0,0.55),
+                0 0 34px rgba(47,227,196,0.35),
+                inset 0 1px 0 rgba(255,255,255,0.10);
         }
 
         #foldedBtn:active {
@@ -1355,13 +1398,29 @@ function ensureHost() {
         }
 
         #foldedBtn svg {
-            width: 44px;
+            width: 46px;
 
-            height: 44px;
+            height: 46px;
 
             display: block;
 
             pointer-events: none;
+        }
+
+        @keyframes cat-pulse {
+            0%, 100% {
+                box-shadow:
+                    0 10px 30px rgba(0,0,0,0.50),
+                    0 0 20px rgba(47,227,196,0.16),
+                    inset 0 1px 0 rgba(255,255,255,0.06);
+            }
+
+            50% {
+                box-shadow:
+                    0 10px 30px rgba(0,0,0,0.50),
+                    0 0 34px rgba(47,227,196,0.34),
+                    inset 0 1px 0 rgba(255,255,255,0.10);
+            }
         }
 
         #panelResize {
@@ -1377,12 +1436,14 @@ function ensureHost() {
 
             cursor: nwse-resize;
 
-            background: linear-gradient(135deg, transparent 50%, rgba(0,122,255,0.3) 50%);
+            background: linear-gradient(135deg, transparent 50%, rgba(47,227,196,0.45) 50%);
 
-            border-bottom-right-radius: 24px;
+            border-bottom-right-radius: 22px;
 
-            z-index: 3;
+            z-index: 4;
         }
+
+        /* ---------- 扫描取景器 ---------- */
 
         #scanOverlay {
             position: fixed !important;
@@ -1401,7 +1462,7 @@ function ensureHost() {
 
             z-index: 2147483646 !important;
 
-            background: transparent;
+            background: rgba(3,7,10,0.12);
 
             cursor: crosshair;
 
@@ -1429,11 +1490,14 @@ function ensureHost() {
 
             overflow: visible;
 
-            border: 2px dashed ${C.primary};
+            border: 1.5px solid rgba(47,227,196,0.85);
 
-            background: rgba(0,122,255,0.05);
+            background: rgba(47,227,196,0.05);
 
-            box-shadow: 0 0 20px rgba(0,122,255,0.2), inset 0 0 20px rgba(0,122,255,0.02);
+            box-shadow:
+                0 0 0 1px rgba(0,0,0,0.45),
+                0 0 30px rgba(47,227,196,0.22),
+                inset 0 0 46px rgba(47,227,196,0.06);
 
             cursor: move;
 
@@ -1441,21 +1505,129 @@ function ensureHost() {
 
             zoom: 1 !important;
 
-            border-radius: 16px;
+            border-radius: 14px;
+
+            isolation: isolate;
+        }
+
+        .scan-beam {
+            position: absolute;
+
+            left: 1px;
+            right: 1px;
+            top: 0;
+
+            height: 34%;
+
+            border-radius: 12px;
+
+            background: linear-gradient(
+                180deg,
+                rgba(47,227,196,0) 0%,
+                rgba(47,227,196,0.10) 55%,
+                rgba(47,227,196,0.30) 88%,
+                rgba(233,255,250,0.55) 100%
+            );
+
+            pointer-events: none;
+
+            z-index: 2;
+
+            animation: scan-sweep 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+
+            mix-blend-mode: screen;
+        }
+
+        @keyframes scan-sweep {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            12% {
+                opacity: 1;
+            }
+
+            88% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(392%);
+                opacity: 0;
+            }
+        }
+
+        .scan-corner {
+            position: absolute;
+
+            width: 16px;
+            height: 16px;
+
+            border: 2px solid rgba(47,227,196,0.95);
+
+            pointer-events: none;
+
+            z-index: 3;
+
+            filter: drop-shadow(0 0 6px rgba(47,227,196,0.55));
+        }
+
+        .scan-corner[data-corner="nw"] {
+            left: -2px;
+            top: -2px;
+            border-right: 0;
+            border-bottom: 0;
+            border-top-left-radius: 8px;
+        }
+
+        .scan-corner[data-corner="ne"] {
+            right: -2px;
+            top: -2px;
+            border-left: 0;
+            border-bottom: 0;
+            border-top-right-radius: 8px;
+        }
+
+        .scan-corner[data-corner="sw"] {
+            left: -2px;
+            bottom: -2px;
+            border-right: 0;
+            border-top: 0;
+            border-bottom-left-radius: 8px;
+        }
+
+        .scan-corner[data-corner="se"] {
+            right: -2px;
+            bottom: -2px;
+            border-left: 0;
+            border-top: 0;
+            border-bottom-right-radius: 8px;
         }
 
         .handle {
             position: absolute;
 
-            width: 14px;
+            width: 12px;
 
-            height: 14px;
+            height: 12px;
 
             border-radius: 50%;
 
-            background: ${C.primary};
+            background: #2FE3C4;
 
-            box-shadow: 0 0 6px rgba(0,122,255,0.5);
+            border: 1px solid rgba(3,26,22,0.55);
+
+            box-shadow: 0 0 9px rgba(47,227,196,0.75);
+
+            z-index: 4;
+
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .handle:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 14px rgba(47,227,196,0.95);
         }
 
         #scanActions {
@@ -1463,35 +1635,33 @@ function ensureHost() {
 
             left: 50%;
 
-            top: calc(100% + 16px);
+            top: calc(100% + 14px);
 
             transform: translateX(-50%);
 
             display: flex;
 
-            gap: 12px;
+            gap: 10px;
 
             white-space: nowrap;
+
+            z-index: 5;
         }
 
         .scan-action {
-            padding: 10px 22px;
+            padding: 10px 20px;
 
-            border: 0;
-
-            border-radius: 12px;
+            border-radius: 11px;
 
             cursor: pointer;
 
             font-weight: 600;
 
-            font-size: 1em;
+            font-size: 0.95em;
 
-            letter-spacing: 0.02em;
+            letter-spacing: 0.03em;
 
-            font-family: ${C.fontSans};
-
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
 
             transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease;
         }
@@ -1501,37 +1671,46 @@ function ensureHost() {
         }
 
         #confirmBtn {
-            background: ${C.primary};
+            border: 1px solid rgba(255,255,255,0.10);
 
-            color: #fff;
+            background: linear-gradient(180deg, #3BEDD0, #12A88F);
 
-            box-shadow: 0 2px 8px rgba(0,122,255,0.3);
+            color: #032420;
+
+            box-shadow: 0 10px 26px rgba(18,168,143,0.40);
         }
 
         #confirmBtn:hover {
-            background: ${C.primaryDark};
+            background: linear-gradient(180deg, #5CF7DE, #16BFA3);
 
-            box-shadow: 0 4px 12px rgba(0,122,255,0.4);
+            box-shadow: 0 12px 30px rgba(18,168,143,0.50);
         }
 
         #cancelBtn {
-            background: rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
 
-            color: ${C.text};
+            background: rgba(10,16,22,0.86);
 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            color: #C7D6DD;
+
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+
+            box-shadow: 0 8px 22px rgba(0,0,0,0.35);
         }
 
         #cancelBtn:hover {
-            background: rgba(0,0,0,0.08);
+            background: rgba(26,36,45,0.92);
         }
+
+        /* ---------- 滚动条 ---------- */
 
         #settingsPanel,
         #historyList,
         #results {
             scrollbar-width: thin;
 
-            scrollbar-color: rgba(0,122,255,0.3) rgba(0,0,0,0.02);
+            scrollbar-color: rgba(47,227,196,0.35) rgba(255,255,255,0.03);
         }
 
         #settingsPanel::-webkit-scrollbar,
@@ -1545,7 +1724,7 @@ function ensureHost() {
         #settingsPanel::-webkit-scrollbar-track,
         #historyList::-webkit-scrollbar-track,
         #results::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.02);
+            background: rgba(255,255,255,0.03);
 
             border-radius: 10px;
         }
@@ -1553,7 +1732,7 @@ function ensureHost() {
         #settingsPanel::-webkit-scrollbar-thumb,
         #historyList::-webkit-scrollbar-thumb,
         #results::-webkit-scrollbar-thumb {
-            background: rgba(0,122,255,0.3);
+            background: rgba(47,227,196,0.35);
 
             border-radius: 10px;
         }
@@ -1561,8 +1740,10 @@ function ensureHost() {
         #settingsPanel::-webkit-scrollbar-thumb:hover,
         #historyList::-webkit-scrollbar-thumb:hover,
         #results::-webkit-scrollbar-thumb:hover {
-            background: rgba(0,122,255,0.5);
+            background: rgba(47,227,196,0.6);
         }
+
+        /* ---------- 识别中 ---------- */
 
         #loadingOverlay {
             position: fixed !important;
@@ -1583,7 +1764,10 @@ function ensureHost() {
 
             justify-content: center;
 
-            background: transparent;
+            background: rgba(3,7,10,0.35);
+
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
 
             pointer-events: auto !important;
 
@@ -1597,24 +1781,39 @@ function ensureHost() {
         }
 
         .loading-spinner {
-            width: 50px;
+            width: 46px;
 
-            height: 50px;
+            height: 46px;
 
-            border: 4px solid rgba(0,0,0,0.1);
+            border: 3px solid rgba(47,227,196,0.14);
 
-            border-top-color: ${C.primary};
+            border-top-color: #2FE3C4;
+
+            border-right-color: rgba(246,193,119,0.55);
 
             border-radius: 50%;
 
-            animation: qr-spin 0.9s linear infinite;
+            animation: qr-spin 0.85s linear infinite;
 
-            box-shadow: 0 0 20px rgba(0,122,255,0.2);
+            box-shadow:
+                0 0 26px rgba(47,227,196,0.35),
+                inset 0 0 12px rgba(47,227,196,0.10);
         }
 
         @keyframes qr-spin {
             to {
                 transform: rotate(360deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .scan-beam,
+            #foldedBtn {
+                animation: none !important;
+            }
+
+            .loading-spinner {
+                animation-duration: 2.4s;
             }
         }
     `;
@@ -1769,9 +1968,17 @@ function createUI() {
         <div id="title">
             <div class="title-left">
                 <div class="title-icon">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="${C.primary}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-                        <circle cx="12" cy="12" r="3"/>
+                    <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="eyeIris79" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#2FE3C4"/>
+                                <stop offset="100%" stop-color="#F6C177"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M1.7 12C4.3 8.3 7.8 6.4 12 6.4s7.7 1.9 10.3 5.6c-2.6 3.7-6.1 5.6-10.3 5.6S4.3 15.7 1.7 12Z" fill="#2FE3C4" fill-opacity="0.10" stroke="url(#eyeIris79)" stroke-width="1.4"/>
+                        <circle cx="12" cy="12" r="3.5" fill="#051A17" stroke="url(#eyeIris79)" stroke-width="1.2"/>
+                        <ellipse cx="12" cy="12" rx="0.95" ry="2.5" fill="#2FE3C4"/>
+                        <circle cx="10.6" cy="10.5" r="0.65" fill="#EAFDF8"/>
                     </svg>
                 </div>
                 <div class="title-text">猫眼扫描</div>
@@ -1837,32 +2044,44 @@ function createUI() {
     foldedBtn.setAttribute('aria-label', '展开猫眼扫描');
 
     foldedBtn.innerHTML = `
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="蓝白小猫">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="夜色小猫">
             <defs>
-                <linearGradient id="catBlue79" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#8fe6ff"/>
-                    <stop offset="100%" stop-color="#269ddd"/>
+                <linearGradient id="catFur79" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#26394A"/>
+                    <stop offset="100%" stop-color="#0D161E"/>
                 </linearGradient>
-                <linearGradient id="catWhite79" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#ffffff"/>
-                    <stop offset="100%" stop-color="#e9f8ff"/>
+                <linearGradient id="catEar79" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#1E3D40"/>
+                    <stop offset="100%" stop-color="#0B191D"/>
                 </linearGradient>
+                <radialGradient id="catEyeGlow79" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#B6FFF4"/>
+                    <stop offset="55%" stop-color="#2FE3C4"/>
+                    <stop offset="100%" stop-color="#0C7F6C"/>
+                </radialGradient>
+                <filter id="catSoft79" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur stdDeviation="1.8"/>
+                </filter>
             </defs>
-            <path d="M18 35 L15 10 Q15 5 20 8 L37 21 Z" fill="url(#catBlue79)"/>
-            <path d="M63 21 L80 8 Q85 5 85 10 L82 35 Z" fill="url(#catBlue79)"/>
-            <path d="M20 16 L32 24 L22 28 Z" fill="#ffc7d6"/>
-            <path d="M68 24 L80 16 L78 28 Z" fill="#ffc7d6"/>
-            <path d="M16 38 Q16 16 50 15 Q84 16 84 38 Q84 76 50 86 Q16 76 16 38 Z" fill="url(#catWhite79)" stroke="#289fdd" stroke-width="3"/>
-            <path d="M26 23 Q50 13 74 23 Q69 37 50 40 Q31 37 26 23 Z" fill="url(#catBlue79)"/>
-            <ellipse cx="34" cy="47" rx="9" ry="11" fill="#173d64"/>
-            <ellipse cx="66" cy="47" rx="9" ry="11" fill="#173d64"/>
-            <ellipse cx="31.5" cy="43" rx="3" ry="4" fill="#fff"/>
-            <ellipse cx="63.5" cy="43" rx="3" ry="4" fill="#fff"/>
-            <ellipse cx="25" cy="59" rx="10" ry="5" fill="#ff9eb5" opacity=".7"/>
-            <ellipse cx="75" cy="59" rx="10" ry="5" fill="#ff9eb5" opacity=".7"/>
-            <path d="M46 56 Q50 52 54 56 Q50 61 46 56 Z" fill="#e889a0"/>
-            <path d="M50 60 Q45 66 41 63 M50 60 Q55 66 59 63" fill="none" stroke="#54728d" stroke-width="2.2" stroke-linecap="round"/>
-            <path d="M28 70 Q50 84 72 70 Q70 88 50 91 Q30 88 28 70 Z" fill="#fff" opacity=".96"/>
+            <path d="M18 35 L15 10 Q15 5 20 8 L37 21 Z" fill="url(#catEar79)" stroke="#2C4A52" stroke-width="2"/>
+            <path d="M63 21 L80 8 Q85 5 85 10 L82 35 Z" fill="url(#catEar79)" stroke="#2C4A52" stroke-width="2"/>
+            <path d="M20 16 L32 24 L22 28 Z" fill="#B05A72" opacity=".7"/>
+            <path d="M68 24 L80 16 L78 28 Z" fill="#B05A72" opacity=".7"/>
+            <path d="M16 38 Q16 16 50 15 Q84 16 84 38 Q84 76 50 86 Q16 76 16 38 Z" fill="url(#catFur79)" stroke="#2C4A52" stroke-width="2.4"/>
+            <path d="M26 23 Q50 13 74 23 Q69 37 50 40 Q31 37 26 23 Z" fill="#16242E" opacity=".85"/>
+            <ellipse cx="34" cy="47" rx="9.5" ry="10.5" fill="url(#catEyeGlow79)" filter="url(#catSoft79)" opacity=".9"/>
+            <ellipse cx="66" cy="47" rx="9.5" ry="10.5" fill="url(#catEyeGlow79)" filter="url(#catSoft79)" opacity=".9"/>
+            <ellipse cx="34" cy="47" rx="8" ry="9" fill="url(#catEyeGlow79)"/>
+            <ellipse cx="66" cy="47" rx="8" ry="9" fill="url(#catEyeGlow79)"/>
+            <ellipse cx="34" cy="47" rx="1.6" ry="6" fill="#04231F"/>
+            <ellipse cx="66" cy="47" rx="1.6" ry="6" fill="#04231F"/>
+            <circle cx="31.3" cy="43.4" r="1.7" fill="#F4FFFC" opacity=".92"/>
+            <circle cx="63.3" cy="43.4" r="1.7" fill="#F4FFFC" opacity=".92"/>
+            <ellipse cx="25" cy="59" rx="9" ry="4.4" fill="#C4647F" opacity=".32"/>
+            <ellipse cx="75" cy="59" rx="9" ry="4.4" fill="#C4647F" opacity=".32"/>
+            <path d="M46 56 Q50 52 54 56 Q50 61 46 56 Z" fill="#D98AA0"/>
+            <path d="M50 60 Q45 66 41 63 M50 60 Q55 66 59 63" fill="none" stroke="#5A7C8A" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M28 70 Q50 84 72 70 Q70 88 50 91 Q30 88 28 70 Z" fill="#0B141A" opacity=".9"/>
         </svg>
     `;
 
@@ -2475,6 +2694,17 @@ function startScan() {
             handle.style.cssText = `cursor:${cursor};${position}`;
             selection.appendChild(handle);
         });
+
+        ['nw', 'ne', 'sw', 'se'].forEach(corner => {
+            const bracket = document.createElement('div');
+            bracket.className = 'scan-corner';
+            bracket.dataset.corner = corner;
+            selection.appendChild(bracket);
+        });
+
+        const beam = document.createElement('div');
+        beam.className = 'scan-beam';
+        selection.appendChild(beam);
 
         const actions = document.createElement('div');
         actions.id = 'scanActions';
@@ -3692,14 +3922,16 @@ function init() {
         style.textContent = `
             img.qr-auto-highlight,
             canvas.qr-auto-highlight {
-                outline: 3px solid #FF9500 !important;
+                outline: 2px solid rgba(47, 227, 196, 0.9) !important;
                 outline-offset: 2px;
+                box-shadow: 0 0 18px rgba(47, 227, 196, 0.35) !important;
                 cursor: pointer;
-                transition: outline-color 0.2s ease;
+                transition: outline-color 0.2s ease, box-shadow 0.2s ease;
             }
             img.qr-auto-highlight:hover,
             canvas.qr-auto-highlight:hover {
-                outline-color: #FF3B30 !important;
+                outline-color: rgba(246, 193, 119, 0.95) !important;
+                box-shadow: 0 0 22px rgba(246, 193, 119, 0.4) !important;
             }
         `;
         document.head.appendChild(style);
