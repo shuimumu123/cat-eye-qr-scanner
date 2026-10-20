@@ -1,5 +1,7 @@
 # 猫眼扫描工具
 
+**简体中文** | [English](README.en.md)
+
 蓝白 iOS 风格的网页二维码扫描用户脚本，基于 Tampermonkey / Violentmonkey 运行。
 
 ## 功能
@@ -71,5 +73,6 @@ https://raw.githubusercontent.com/<你的用户名>/cat-eye-qr-scanner/main/cat-
 
 ```
 cat-eye-qr-scanner.user.js   # 用户脚本本体，Tampermonkey 直接安装
-README.md                    # 说明文档
+README.md                    # 简体中文说明（本文件）
+README.en.md                 # English documentation
 ```
