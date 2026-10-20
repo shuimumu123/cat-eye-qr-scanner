@@ -22,8 +22,8 @@
 
 安装地址（把 `<你的用户名>` 换成你的 GitHub 用户名）：
 
-```
-https://raw.githubusercontent.com/<你的用户名>/cat-eye-qr-scanner/main/cat-eye-qr-scanner.user.js
+```[
+https://raw.githubusercontent.com/shuimumu123/cat-eye-qr-scanner/main/cat-eye-qr-scanner.user.js
 ```
 
 ## 使用
