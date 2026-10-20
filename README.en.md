@@ -23,7 +23,7 @@ A web QR-code scanner userscript with a blue-and-white iOS look, running on Tamp
 Install URL (replace `<your-username>` with your GitHub username):
 
 ```
-https://raw.githubusercontent.com/<your-username>/cat-eye-qr-scanner/main/cat-eye-qr-scanner.user.js
+https://raw.githubusercontent.com/shuimumu123/cat-eye-qr-scanner/main/cat-eye-qr-scanner.user.js
 ```
 
 ## Usage
